@@ -26,31 +26,31 @@ Aplicativo do motorista da Arizona Log, em Expo (SDK 58), para iOS e Android. Co
 ## Estrutura
 
 ```
-app.config.ts          nome, identificador, permissões e endereços por ambiente
+app.config.ts          nome, identificador e permissões
 eas.json               perfis de build e canais de atualização
 src/app                rotas (Expo Router): cada arquivo é uma tela
 src/app/login.tsx      tela de entrada
 src/app/(driver)       área logada, com as abas
 src/api                cliente HTTP e chamadas por rota
 src/session            token no cofre e estado de autenticação
-src/config             leitura do ambiente
+src/config             endereços de dev e de produção
 src/theme              cores e medidas, as mesmas do site
 src/components         botão, campo de texto e moldura de tela
 ```
 
 ## Ambientes
 
-O ambiente vem da variável `APP_ENV` (`development` ou `production`), lida em `app.config.ts`. Sem a variável, vale
-`development`.
+É um app só, com um identificador só (`br.com.arizonalog.app`). O que muda entre dev e produção é o endereço do
+back, escolhido dentro do app. Os dois endereços ficam em `src/config/environment.ts`:
 
 | | development | production |
 |---|---|---|
-| Nome | Arizona Log-dev | Arizona Log |
-| Identificador | `br.com.arizonalog.app.dev` | `br.com.arizonalog.app` |
 | API | `https://ms-arizona-dev-c6hgw5heia-rj.a.run.app` | vazio, preencher quando existir |
 | Site | `https://ms-arizona-web-dev-c6hgw5heia-rj.a.run.app` | `https://arizonalog.com.br` |
 
-Os dois identificadores são diferentes, então o app de dev e o de produção convivem no mesmo aparelho.
+Hoje o app aponta para `development`, porque a API de produção ainda não tem endereço. A regra final é todo usuário
+em produção, com uma opção de troca para dev só para quem tem acesso de desenvolvimento. Essa troca ainda não foi
+implementada.
 
 ## Rodar
 
@@ -60,13 +60,11 @@ desenvolvimento instalado no aparelho.
 ```bash
 npm install
 npx eas-cli@latest login
-npx eas-cli@latest init
 npx eas-cli@latest build --profile development --platform android
 npx expo start --dev-client
 ```
 
-O `eas init` cria o projeto na Expo e devolve um id. Esse id entra como `EAS_PROJECT_ID`, que liga as atualizações
-sem loja.
+O projeto na Expo é `@arizonaagronegocios/arizonalog`. O id dele já está em `app.config.ts`.
 
 Conferir o código:
 
@@ -80,7 +78,7 @@ npm run lint
 | Perfil | Para quê | Canal |
 |---|---|---|
 | `development` | build de desenvolvimento, com recarga de código | `development` |
-| `dev` | build interno apontando para o back de dev | `dev` |
+| `preview` | build interno para teste, sem recarga de código | `preview` |
 | `production` | build das lojas | `production` |
 
 Atualização sem passar pela loja (só código JavaScript e imagens):

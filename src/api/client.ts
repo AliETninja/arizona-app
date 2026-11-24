@@ -26,7 +26,7 @@ export class ApiError extends Error {
 }
 
 export const apiUrl = (path: string) =>
-  apiBaseUrl + "/" + path.replace(/^\/+/, "");
+  apiBaseUrl() + "/" + path.replace(/^\/+/, "");
 
 export function parseApiJson<T>(text: string): T {
   return JSON.parse(text, (_key, value) =>

@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Button } from "@/components/Button";
 import { AuthProvider, useAuth } from "@/session/AuthProvider";
 import { colors, spacing } from "@/theme/colors";
+import "@/tracking/registerTrackingTask";
 
 function Navigation() {
   const { state, retry } = useAuth();

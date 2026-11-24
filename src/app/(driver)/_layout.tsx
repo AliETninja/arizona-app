@@ -1,25 +1,11 @@
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import { Tabs } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import { Stack } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { postDriverSelfieStatus } from "@/api/driverSelfie";
 import { Button } from "@/components/Button";
-import { Screen } from "@/components/Screen";
+import { SelfieGate } from "@/features/selfie/SelfieGate";
 import { useAuth } from "@/session/AuthProvider";
 import { colors, spacing } from "@/theme/colors";
-
-type IconName = keyof typeof Ionicons.glyphMap;
-
-const icon = (name: IconName) =>
-  function TabIcon({ focused, size }: { focused: boolean; size: number }) {
-    return (
-      <Ionicons
-        name={name}
-        color={focused ? colors.primary : colors.mutedForeground}
-        size={size}
-      />
-    );
-  };
 
 export default function DriverLayout() {
   const { state } = useAuth();
@@ -42,34 +28,14 @@ export default function DriverLayout() {
         <Button label="Tentar novamente" onPress={() => selfie.refetch()} />
       </View>
     );
-  if (selfie.data.needsSelfie)
-    return <Screen title="PRIMEIRO ACESSO DO MOTORISTA" />;
+  if (selfie.data.needsSelfie) return <SelfieGate />;
 
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.mutedForeground,
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{ title: "Corridas", tabBarIcon: icon("navigate-outline") }}
-      />
-      <Tabs.Screen
-        name="ofertas"
-        options={{ title: "Viagens", tabBarIcon: icon("cube-outline") }}
-      />
-      <Tabs.Screen
-        name="chat"
-        options={{ title: "Chat", tabBarIcon: icon("chatbubbles-outline") }}
-      />
-      <Tabs.Screen
-        name="historico"
-        options={{ title: "Histórico", tabBarIcon: icon("time-outline") }}
-      />
-    </Tabs>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="corrida/[tripId]" />
+      <Stack.Screen name="negociacao/[opportunityId]" />
+    </Stack>
   );
 }
 

@@ -1,52 +1,30 @@
 import type { ConfigContext, ExpoConfig } from "expo/config";
 
-type Environment = "development" | "production";
+const identifier = "br.com.arizonalog.app";
 
-const environment: Environment =
-  process.env.APP_ENV === "production" ? "production" : "development";
-
-const settings = {
-  development: {
-    name: "Arizona Log-dev",
-    scheme: "arizonalog-dev",
-    identifier: "br.com.arizonalog.app.dev",
-    apiUrl: "https://ms-arizona-dev-c6hgw5heia-rj.a.run.app",
-    webUrl: "https://ms-arizona-web-dev-c6hgw5heia-rj.a.run.app",
-  },
-  production: {
-    name: "Arizona Log",
-    scheme: "arizonalog",
-    identifier: "br.com.arizonalog.app",
-    apiUrl: "",
-    webUrl: "https://arizonalog.com.br",
-  },
-}[environment];
-
-const easProjectId = process.env.EAS_PROJECT_ID ?? "";
+const easProjectId = "dd991b96-e31b-4930-80c5-e57e253cc52f";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: settings.name,
-  slug: "arizona-app",
+  name: "Arizona Log",
+  slug: "arizonalog",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/icon.png",
-  scheme: settings.scheme,
+  scheme: "arizonalog",
   userInterfaceStyle: "light",
   runtimeVersion: { policy: "appVersion" },
-  updates: easProjectId
-    ? { url: "https://u.expo.dev/" + easProjectId }
-    : undefined,
+  updates: { url: "https://u.expo.dev/" + easProjectId },
   ios: {
     supportsTablet: false,
-    bundleIdentifier: settings.identifier,
+    bundleIdentifier: identifier,
     infoPlist: {
       UIBackgroundModes: ["location", "fetch", "remote-notification"],
       ITSAppUsesNonExemptEncryption: false,
     },
   },
   android: {
-    package: settings.identifier,
+    package: identifier,
     adaptiveIcon: {
       backgroundColor: "#ffffff",
       foregroundImage: "./assets/android-icon-foreground.png",
@@ -85,9 +63,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ],
   experiments: { typedRoutes: true },
   extra: {
-    environment,
-    apiUrl: settings.apiUrl,
-    webUrl: settings.webUrl,
-    eas: easProjectId ? { projectId: easProjectId } : undefined,
+    eas: { projectId: easProjectId },
   },
 });

@@ -1,8 +1,9 @@
-import { Screen } from "@/components/Screen";
+import { TripList } from "./TripList";
 
-export default function Trips() {
+export function TripsScreen() {
   return (
-    <Screen
+    <TripList
+      mode="corridas"
       title="Suas corridas"
       subtitle="Aceite e acompanhe as viagens que as empresas atribuíram diretamente a você."
     />

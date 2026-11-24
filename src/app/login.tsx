@@ -44,7 +44,7 @@ export default function Login() {
 
   const register = () =>
     WebBrowser.openBrowserAsync(
-      webBaseUrl + "/login?perfil=caminhoneiro&cadastro=1",
+      webBaseUrl() + "/login?perfil=caminhoneiro&cadastro=1",
     );
 
   return (
